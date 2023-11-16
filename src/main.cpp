@@ -26,7 +26,8 @@ void getPhotos(string mood) {
 void titleBar() {
     using namespace std;
 
-    cout << "Kata's social media helper v 0.1" << endl;
+    cout << "Kata's social media helper v 0.2" << endl;
+    cout << "Designed for Aada :3";
     cout << "----------------------------------" << endl;
 }
 
@@ -49,7 +50,7 @@ int main() {
     string oldDir, newDir;
     titleBar();
 
-    cout << "What's the mood for today's post? (Happy, Moody, Cinematic, Flirty)";
+    cout << "What's the mood for today's post?";
     cout << "\n" << ": ";
     cin >> mood;
 
@@ -65,8 +66,6 @@ int main() {
 
     else {
         mood = "../pictures/" + mood;
-        mood = mood + "/";
-        mood = mood + ;
         mood = mood + "/";
     }
 

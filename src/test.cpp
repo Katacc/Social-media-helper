@@ -5,31 +5,63 @@
 #include <thread>
 #include <vector>
 #include <filesystem>
+#include <iomanip>
 namespace fs = std::filesystem;
 using namespace std;
 
 vector<string> photos;
-vector<string> paths;
+vector<string> pathsInverted;
+
+string mood = "";
 string cosplaySelect = "";
+string colourSelection = "";
+
+
+void moodSelection() {
+
+    cout << "\nList of filters:" << endl;
+    string path = "../pictures/";
+    for (const auto & entry : fs::directory_iterator(path)) {
+        cout << entry.path() << endl;
+    }
+
+    cout << "What's the mood for today's post?";
+    cout << "\n" << ": ";
+    cin >> mood;
+    system("cls");
+    titleBar();
+}
+
+void cosplaySelectInvert() {
+    cout << "Type of the name of the cosplay" << endl;
+    cout << ": ";
+    cin >> cosplaySelect;
+
+    system("cls");
+    titleBar();
+}
+
+void colourSelect() {
+
+    cout << "\nList of colours:" << endl;
+    string path = "../pictures/" + mood;
+    for (const auto & entry : fs::directory_iterator(path)) {
+        cout << entry.path() << endl;
+    }
+
+    cout << "\nColour palette name:" << endl;
+    cout << ": ";
+    cin >> colourSelection;
+
+    system("cls");
+    titleBar();
+}
 
 void getPhotos(string mood) {
     using namespace std;
 
-
-    if (cosplaySelect == "all" || "All" || "l") {
-        string path = mood;
-        for (const auto & entry : fs::directory_iterator(path)) {
-            cout << entry.path() << endl;
-            paths.push_back (entry.path().string());
-        }
-
-        for (const auto & entry : fs::directory_iterator(paths)) {
-            cout << entry.paths() << endl;
-
-        }
-    }
-
-    string path = mood;
+    string path = "../pictures/" + mood;
+    path = path + "/";
     for (const auto & entry : fs::directory_iterator(path)) {
         cout << entry.path() << endl;
         photos.push_back (entry.path().string());
@@ -57,43 +89,51 @@ int main() {
     // sleep_for(10ns);
     // sleep_until(system_clock::now() + 1s)
 
-    string mood = "";
     int vectorLenght { };
     int randomNumber { };
     string selectedPhoto = "";
     string oldDir, newDir;
+    int filters { };
     titleBar();
 
-    cout << "What's the mood for today's post? (Happy, Moody, Cinematic, Flirty)";
-    cout << "\n" << ": ";
-    cin >> mood;
-
-    cout << "Type of the name of the cosplay" << endl;
+    cout << "What filters you want?" << endl;
+    cout << "1. Only mood" << endl;
+    cout << "2. Mood + inverted cosplay" << endl;
+    cout << "3. Mood + inverted cosplay + colours" << endl;
     cout << ": ";
-    cin >> cosplaySelect;
+    cin >> filters; 
 
-    if (cosplaySelect != "l") {
-        mood = "../pictures/" + mood;
-        mood = mood + "/";
-        mood = mood + cosplaySelect;
+    if (filters == 1) {
+        moodSelection();
+    }
+
+    else if (filters == 2) {
+        moodSelection();
+        cosplaySelectInvert();
     }
 
     else {
-        mood = "../pictures/" + mood;
-        mood = mood + "/";
+        moodSelection();
+        cosplaySelectInvert();
+        colourSelect();
     }
 
+    // get the vector full of photos
     getPhotos(mood);
 
-
+    // clear and thingys
     cout << "Initializing...";
     sleep_for(2s);
-
     system("cls");
 
+    // random number geneartion and selecting the photo
     randomNumber = rand() % photos.size();
-
     selectedPhoto = photos.at(randomNumber);
+
+    while (selectedPhoto.find(cosplaySelect) != std::string::npos) {
+        randomNumber = rand() % photos.size();
+        selectedPhoto = photos.at(randomNumber);
+    }
 
     oldDir = selectedPhoto;
 
