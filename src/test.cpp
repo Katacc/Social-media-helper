@@ -6,16 +6,29 @@
 #include <vector>
 #include <filesystem>
 #include <iomanip>
+
+using namespace std::this_thread;     // sleep_for, sleep_until
+using namespace std::chrono_literals; // ns, us, ms, s, h, etc.
+using std::chrono::system_clock;
+
 namespace fs = std::filesystem;
 using namespace std;
 
 vector<string> photos;
 vector<string> pathsInverted;
+vector<string> moodlist;
 
 string mood = "";
 string cosplaySelect = "";
 string colourSelection = "";
 
+
+void titleBar() {
+    using namespace std;
+
+    cout << "Kata's social media helper v 0.2" << endl;
+    cout << "----------------------------------" << endl;
+}
 
 void moodSelection() {
 
@@ -33,6 +46,14 @@ void moodSelection() {
 }
 
 void cosplaySelectInvert() {
+
+    cout << "\nList of filenames:" << endl;
+    string path = "../pictures/" + mood;
+    path = path + "/";
+    for (const auto & entry : fs::directory_iterator(path)) {
+        cout << entry.path() << endl;
+    }
+
     cout << "Type of the name of the cosplay" << endl;
     cout << ": ";
     cin >> cosplaySelect;
@@ -45,6 +66,7 @@ void colourSelect() {
 
     cout << "\nList of colours:" << endl;
     string path = "../pictures/" + mood;
+    path = path + "/";
     for (const auto & entry : fs::directory_iterator(path)) {
         cout << entry.path() << endl;
     }
@@ -69,13 +91,29 @@ void getPhotos(string mood) {
 
 }
 
+void randomizeAll() {
+    system("cls");
+    titleBar();
 
-void titleBar() {
-    using namespace std;
+    int randomNumber2 { };
+    string selectedMood = "";
 
-    cout << "Kata's social media helper v 0.1" << endl;
-    cout << "----------------------------------" << endl;
+    cout << "Randomizing all..";
+    sleep_for(2s);
+
+    string path = "../pictures/";
+    for (const auto & entry : fs::directory_iterator(path)) {
+        moodlist.push_back (entry.path().string());
+    }
+
+    randomNumber2 = rand() % moodlist.size();
+    mood = moodlist.at(randomNumber2);
+    // path = selectedMood;
+    // for (const auto & entry : fs::directory_iterator(path)) {
+    //     photos.push_back (entry.path().string());
+    // }
 }
+
 
 int main() {
     using namespace std;
@@ -83,14 +121,13 @@ int main() {
     using std::vector;
     std::error_code err;
     // sleep commands
-    using namespace std::this_thread;     // sleep_for, sleep_until
-    using namespace std::chrono_literals; // ns, us, ms, s, h, etc.
-    using std::chrono::system_clock;
+
     // sleep_for(10ns);
     // sleep_until(system_clock::now() + 1s)
 
     int vectorLenght { };
     int randomNumber { };
+    int randomNumber2 { };
     string selectedPhoto = "";
     string oldDir, newDir;
     int filters { };
@@ -99,7 +136,9 @@ int main() {
     cout << "What filters you want?" << endl;
     cout << "1. Only mood" << endl;
     cout << "2. Mood + inverted cosplay" << endl;
-    cout << "3. Mood + inverted cosplay + colours" << endl;
+    cout << "3. Mood + colours" << endl; 
+    cout << "4. Mood + inverted cosplay + colours" << endl;
+    cout << "5. Randomize all" << endl;
     cout << ": ";
     cin >> filters; 
 
@@ -110,6 +149,15 @@ int main() {
     else if (filters == 2) {
         moodSelection();
         cosplaySelectInvert();
+    }
+
+    else if (filters == 3) {
+        moodSelection();
+        colourSelect();
+    }
+
+    else if (filters == 5) {
+        randomizeAll();
     }
 
     else {
@@ -126,14 +174,22 @@ int main() {
     sleep_for(2s);
     system("cls");
 
-    // random number geneartion and selecting the photo
+    cout << "testi 1";
+
+    // random number generation and selecting the photo
     randomNumber = rand() % photos.size();
     selectedPhoto = photos.at(randomNumber);
 
-    while (selectedPhoto.find(cosplaySelect) != std::string::npos) {
-        randomNumber = rand() % photos.size();
-        selectedPhoto = photos.at(randomNumber);
+    cout << "testi 2";
+
+    if (filters == 2 || 4) {
+        while (selectedPhoto.find(cosplaySelect) != std::string::npos) {
+            randomNumber = rand() % photos.size();
+            selectedPhoto = photos.at(randomNumber);
+        }
     }
+
+    cout << "testi 3";
 
     oldDir = selectedPhoto;
 
