@@ -6,6 +6,7 @@
 #include <vector>
 #include <filesystem>
 #include <iomanip>
+#include <time.h>
 
 using namespace std::this_thread;     // sleep_for, sleep_until
 using namespace std::chrono_literals; // ns, us, ms, s, h, etc.
@@ -32,33 +33,15 @@ void titleBar() {
 
 void moodSelection() {
 
-    srand(time(0));
-
     cout << "\nList of filters:" << endl;
     string path = "../pictures/";
     for (const auto & entry : fs::directory_iterator(path)) {
         cout << entry.path() << endl;
     }
 
-    cout << "What's the mood for today's post? (R for random mood)";
+    cout << "What's the mood for today's post?";
     cout << "\n" << ": ";
     cin >> mood;
-
-    if (mood == "R" || "r") {
-        for (const auto & entry : fs::directory_iterator(path)) {
-            moodlist.push_back (entry.path().string());
-        }
-
-        int randomNumberMood { };
-        int moodListSize = moodlist.size() - 1;
-        randomNumberMood = rand() % moodlist.size();
-        mood = moodlist.at(randomNumberMood);
-
-        fs::path p(mood);
-        mood = p.stem().string();
-
-    }
-
     system("cls");
     titleBar();
 }
@@ -80,6 +63,22 @@ void cosplaySelectInvert() {
     titleBar();
 }
 
+void randomizeAll() {
+
+    srand(time(0));
+
+    int randomNumberMood { };
+
+    string path = "../pictures/";
+    for (const auto & entry : fs::directory_iterator(path)) {
+        cout << entry.path() << endl;
+        moodlist.push_back (entry.path().string());
+    }
+
+    
+
+}
+
 
 void getPhotos(string mood) {
     using namespace std;
@@ -92,6 +91,8 @@ void getPhotos(string mood) {
     }
 
 }
+
+
 
 int main() {
     using namespace std;
@@ -113,9 +114,11 @@ int main() {
 
     srand(time(0));
 
+
     cout << "What filters you want?" << endl;
     cout << "1. Only mood" << endl;
     cout << "2. Mood + inverted cosplay" << endl;
+    cout << "3. Randomize photo";
     cout << ": ";
     cin >> filters; 
 
@@ -128,18 +131,31 @@ int main() {
         cosplaySelectInvert();
     }
 
+    else if (filters == 3) {
+        randomizeAll();
+    }
+
+    else {
+        cout << "Error the the input.. Terminating..";
+        return 0;
+    }
+
     // get the vector full of photos
     getPhotos(mood);
 
     // clear and thingys
-    cout << "Initializing...";
+    cout << "Initializing..." << endl;
     sleep_for(2s);
     system("cls");
+
+    cout << "testi 1" << endl;
+ 
 
     // random number generation and selecting the photo
     randomNumber = rand() % photos.size();
     selectedPhoto = photos.at(randomNumber);
 
+    cout << "testi 2";
 
     if (filters == 2) {
         while (selectedPhoto.find(cosplaySelect) != std::string::npos) {
@@ -148,6 +164,7 @@ int main() {
         }
     }
 
+    cout << "testi 3";
 
     oldDir = selectedPhoto;
 
