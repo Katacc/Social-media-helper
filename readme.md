@@ -8,15 +8,15 @@ You can make a shortcut to parent folder afterwards.
 The executable is named "mediaHelper.exe"                             
 
 
-# NOTE!
+## NOTE!
 - For the random mood to properly work, there shouldn't be any empty mood folders.
 The program might crash otherwise!
 
 
-# Prequisites:
+## Prequisites:
 - Up to date vc redist packages
 - Up to date g++ (c++ compiler)
 
 
-# Changelog:
+## Changelog:
 - Added possibility to randomize mood selection
