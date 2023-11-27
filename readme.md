@@ -15,6 +15,7 @@ The program asks the user for the mood and cosplay they want to post and selects
 ## NOTE!
 - For the random mood to properly work, there shouldn't be any empty mood folders.
 The program might crash otherwise!
+- If the program hangs or crashesa fter randomize mood, that means that there isnt any pictures to work with. Close the window and add pictures before trying again!!
 
 
 ## Prequisites:
