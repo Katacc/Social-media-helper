@@ -1,4 +1,4 @@
-# This is kata's social media helper v0.3 
+# This is kata's social media helper v0.5 
 
 This is not finalized build
 
@@ -25,3 +25,4 @@ The program might crash otherwise!
 
 ## Changelog:
 - Added possibility to randomize mood selection
+- LOTS OF BUGFIXES
